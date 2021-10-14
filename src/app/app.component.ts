@@ -7,4 +7,9 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'usjt-ads1an-vlb-angular-app-clientes';
+  clientes = [];
+  onClienteAdicionado(cliente) {
+    //console.log(cliente);
+    this.clientes = [...this.clientes, cliente];
+  }
 }
