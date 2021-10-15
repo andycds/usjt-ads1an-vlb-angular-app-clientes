@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Cliente } from './clientes/cliente.model';
 
 @Component({
   selector: 'app-root',
@@ -7,7 +8,7 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'usjt-ads1an-vlb-angular-app-clientes';
-  clientes = [];
+  clientes: Cliente[] = [];
   onClienteAdicionado(cliente) {
     //console.log(cliente);
     this.clientes = [...this.clientes, cliente];
