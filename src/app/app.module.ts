@@ -14,6 +14,8 @@ import { ClienteListaComponent } from './clientes/cliente-lista/cliente-lista.co
 import { MatExpansionModule } from '@angular/material/expansion';
 import { NgForm } from '@angular/forms';
 
+import { ClienteService } from './clientes/cliente.service';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -31,7 +33,7 @@ import { NgForm } from '@angular/forms';
     MatToolbarModule,
     MatExpansionModule
   ],
-  providers: [],
+  providers: [ClienteService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
