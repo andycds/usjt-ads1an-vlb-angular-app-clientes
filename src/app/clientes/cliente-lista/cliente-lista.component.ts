@@ -25,4 +25,8 @@ export class ClienteListaComponent implements OnInit, OnDestroy {
     });
   }
 
+  onDelete(id: string): void {
+    this.clienteService.removerCliente(id);
+  }
+
 }

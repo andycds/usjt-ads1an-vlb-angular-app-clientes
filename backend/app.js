@@ -1,9 +1,17 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
 const Cliente = require('./models/cliente');
 
-app.use (bodyParser.json());
+mongoose.connect('mongodb+srv://andycds:minhasenha@cluster0.yx57p.mongodb.net/app-mean?retryWrites=true&w=majority') //myFirstDatabase
+  .then(() => {
+    console.log("Conexão OK")
+  }).catch(() => {
+    console.log("Conexão MongoDB com problemas")
+  });
+
+app.use(bodyParser.json());
 
 const clientes = [
   {
@@ -28,14 +36,23 @@ app.use ((req, res, next) => {
 })
 
 
-app.use('/api/clientes', (req, res, next) => {
-  res.status(200).json({
-      mensagem: "Tudo certo",
-      clientes: clientes
-  });
+app.get('/api/clientes', (req, res, next) => {
+  //  console.log("GET!!!");
+  //  res.status(200).json({
+  //      mensagem: "Tudo certo",
+  //      clientes: clientes
+  //  });
+  Cliente.find().then(documents => {
+    console.log(documents);
+    res.status(200).json({
+      mensagem: "Tudo Ok",
+      clientes: documents
+    });
+  })
 });
 
 app.post('/api/clientes', (req, res, next) => {
+  console.log("POST!!!");
   //const cliente = req.body;
 
   const cliente = new Cliente({
@@ -43,9 +60,15 @@ app.post('/api/clientes', (req, res, next) => {
     fone: req.body.fone,
     email: req.body.email
   });
-
+  cliente.save();
   console.log(cliente);
   res.status(201).json({mensagem: 'Cliente inserido com sucesso!'});
 });
+
+app.delete('/api/clientes/:id', (req, res, next) => {
+  console.log(req.params);
+  res.status(200).end();
+})
+
 
 module.exports = app;
