@@ -1,7 +1,7 @@
-import { Component, EventEmitter, Output } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { NgForm } from "@angular/forms";
-//import { Cliente } from '../cliente.model';
 import { ClienteService } from "../cliente.service";
+import { ActivatedRoute, ParamMap } from "@angular/router";
 
 @Component({
   selector: 'app-cliente-inserir',
@@ -9,28 +9,34 @@ import { ClienteService } from "../cliente.service";
   styleUrls: ['./cliente-inserir.component.css'],
 })
 
-export class ClienteInserirComponent{
-  constructor(public clienteService: ClienteService) {}
-  //@Output() clienteAdicionado = new EventEmitter<Cliente>();
-  //nome: string;
-  //fone: string;
-  //email: string;
+export class ClienteInserirComponent implements OnInit{
+
+  private modo: string = "criar";
+
+  constructor(public clienteService: ClienteService, public route: ActivatedRoute) {}
+
+  ngOnInit() {
+    this.route.paramMap.subscribe((paramMap: ParamMap) => {
+      if (paramMap.has("idCliente")) {
+        this.modo = "editar";
+      }
+      else {
+        this.modo = "criar";
+      }
+    });
+  }
 
   onAdicionarCliente(form: NgForm) {
     if (form.invalid) {
       return;
     }
-    //const cliente: Cliente = {
-    //  nome: form.value.nome,
-    //  fone: form.value.fone,
-    //  email: form.value.email
-    //};
+
     this.clienteService.adicionarCliente(
       form.value.nome,
       form.value.fone,
       form.value.email
     );
     form.resetForm();
-    //this.clienteAdicionado.emit(cliente);
+
   }
 }

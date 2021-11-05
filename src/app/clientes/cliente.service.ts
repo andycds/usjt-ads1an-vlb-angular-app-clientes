@@ -36,26 +36,28 @@ export class ClienteService {
   }
 
   adicionarCliente(nome: string, fone: string, email: string) {
-// TODO: O código abaixo foi comentado pois mudamos o modelo do cliente para incluir o id,
-// mas ainda não alteramos essa parte.
-
-//    const cliente: Cliente = {
-//      nome: nome,
-//      fone: fone,
-//      email: email
-//    };
-//    this.httpClient.post<{mensagem: string}>('http://localhost:3000/api/clientes', cliente)
-//      .subscribe((dados) => {
-//        console.log(dados.mensagem);
-//        this.clientes.push(cliente);
-//        this.listaClientesAtualizada.next([...this.clientes]);
-//      })
+   const cliente: Cliente = {
+     id: null,
+     nome: nome,
+     fone: fone,
+     email: email
+   };
+   this.httpClient.post<{mensagem: string, id: string}>('http://localhost:3000/api/clientes', cliente)
+     .subscribe((dados) => {
+       console.log(dados.mensagem);
+       cliente.id = dados.id;
+       this.clientes.push(cliente);
+       this.listaClientesAtualizada.next([...this.clientes]);
+     })
   }
 
   removerCliente(id: string): void {
-    this.httpClient.delete('http://localhost:3000/api/clientes/${id}').subscribe(() => {
-      console.log(`Cliente de id: ${id} removido`);
-    })
+    this.httpClient.delete(`http://localhost:3000/api/clientes/${id}`)
+    .subscribe(() => {
+      //console.log(`Cliente de id: ${id} removido`);
+      this.clientes = this.clientes.filter((cli) => {return cli.id != id});
+      this.listaClientesAtualizada.next([...this.clientes]);
+    });
   }
 
   getListaDeClientesAtualizadaObservable() {

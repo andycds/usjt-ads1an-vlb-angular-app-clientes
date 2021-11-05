@@ -16,6 +16,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { NgForm } from '@angular/forms';
 
 import { ClienteService } from './clientes/cliente.service';
+import { AppRoutingModule } from './app-routing.module';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { ClienteService } from './clientes/cliente.service';
     MatButtonModule,
     MatToolbarModule,
     MatExpansionModule,
-    HttpClientModule
+    HttpClientModule,
+    AppRoutingModule
   ],
   providers: [ClienteService],
   bootstrap: [AppComponent]

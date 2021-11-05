@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const Cliente = require('./models/cliente');
 
-mongoose.connect('mongodb+srv://andycds:minhasenha@cluster0.yx57p.mongodb.net/app-mean?retryWrites=true&w=majority') //myFirstDatabase
+mongoose.connect('mongodb+srv://user_base:outrasenha@cluster0.skf8n.mongodb.net/app-mean?retryWrites=true&w=majority')
   .then(() => {
     console.log("Conexão OK")
   }).catch(() => {
@@ -53,22 +53,28 @@ app.get('/api/clientes', (req, res, next) => {
 
 app.post('/api/clientes', (req, res, next) => {
   console.log("POST!!!");
-  //const cliente = req.body;
-
   const cliente = new Cliente({
     nome: req.body.nome,
     fone: req.body.fone,
     email: req.body.email
   });
-  cliente.save();
+  cliente.save().
+  then(clienteInserido => {
+    res.status(201).json({
+      mensagem: 'cliente inserido',
+      id: clienteInserido._id
+    })
+  });
   console.log(cliente);
   res.status(201).json({mensagem: 'Cliente inserido com sucesso!'});
 });
 
 app.delete('/api/clientes/:id', (req, res, next) => {
-  console.log(req.params);
-  res.status(200).end();
-})
+  Cliente.deleteOne({_id: req.params.id}).then((resultado) => {
+    console.log(resultado);
+    res.status(200).json({mensagem: "Cliente Removido"});
+  });
+});
 
 
 module.exports = app;
