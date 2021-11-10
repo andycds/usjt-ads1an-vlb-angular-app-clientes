@@ -3,6 +3,7 @@ import { Cliente } from './cliente.model';
 import { Subject } from 'rxjs';
 import { HttpBackend, HttpClient, HttpClientModule } from '@angular/common/http';
 import { map } from 'rxjs/operators';
+import { stringify } from 'querystring';
 
 
 @Injectable({ providedIn: 'root' })
@@ -35,6 +36,11 @@ export class ClienteService {
     )
   }
 
+  getCliente(idCliente: string) {
+    //return {...this.clientes.find((cli) => cli.id === idCliente)};
+    return this.httpClient.get<{_id: string, nome: string, fone: string, email: string}>(`http://localhost:3000/api/clientes/${idCliente}`);
+  }
+
   adicionarCliente(nome: string, fone: string, email: string) {
    const cliente: Cliente = {
      id: null,
@@ -62,6 +68,18 @@ export class ClienteService {
 
   getListaDeClientesAtualizadaObservable() {
     return this.listaClientesAtualizada.asObservable();
+  }
+
+  atualizarCliente(id: string, nome: string, fone: string, email: string) {
+    const cliente: Cliente = { id, nome, fone, email };
+    this.httpClient.put(`http://localhost:3000/api/clientes/${id}`, cliente)
+    .subscribe(res => {
+      const copia = [...this.clientes];
+      const indice = copia.findIndex(cli => cli.id === cliente.id);
+      copia[indice] = cliente;
+      this.clientes = copia;
+      this.listaClientesAtualizada.next([...this.clientes]);
+    });
   }
 
 }

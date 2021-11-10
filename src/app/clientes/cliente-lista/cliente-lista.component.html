@@ -7,10 +7,10 @@
     <hr>
     <p>E-mail: {{ cliente.email }}</p>
     <mat-action-row>
-      <button mat-button color="primary">EDITAR</button>
+      <a mat-button color="primary" [routerLink]="['/editar', cliente.id]">EDITAR</a>
       <button mat-button color="warn" (click)="onDelete(cliente.id)"> REMOVER</button>
     </mat-action-row>
   </mat-expansion-panel>
 </mat-accordion>
 
-<p class="mat-body-1" style="text-align:center"; *ngIf="clientes.length <= 0">Não há clientes cadastrados</p>
+<p class="mat-body-1" style="text-align:center" *ngIf="clientes.length <= 0">Não há clientes cadastrados</p>

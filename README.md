@@ -1,5 +1,12 @@
 # UsjtAds1anVlbAngularAppClientes
 
+## Execução
+
+Execute `npm run start:server` na pasta `backend`.
+Execute `ng serve --open` na pasta raiz.
+
+## Angular CLI project
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.2.6.
 
 ## Development server
