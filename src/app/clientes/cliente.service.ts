@@ -4,6 +4,7 @@ import { Subject } from 'rxjs';
 import { HttpBackend, HttpClient, HttpClientModule } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { stringify } from 'querystring';
+import { Router } from '@angular/router'
 
 
 @Injectable({ providedIn: 'root' })
@@ -11,7 +12,7 @@ export class ClienteService {
   private clientes: Cliente[] = [];
   private listaClientesAtualizada = new Subject<Cliente[]>();
 
-  constructor(private httpClient: HttpClient) {
+  constructor(private httpClient: HttpClient, private router: Router) {
 
   }
 
@@ -37,7 +38,6 @@ export class ClienteService {
   }
 
   getCliente(idCliente: string) {
-    //return {...this.clientes.find((cli) => cli.id === idCliente)};
     return this.httpClient.get<{_id: string, nome: string, fone: string, email: string}>(`http://localhost:3000/api/clientes/${idCliente}`);
   }
 
@@ -54,6 +54,7 @@ export class ClienteService {
        cliente.id = dados.id;
        this.clientes.push(cliente);
        this.listaClientesAtualizada.next([...this.clientes]);
+       this.router.navigate(['/']);
      })
   }
 
@@ -79,7 +80,7 @@ export class ClienteService {
       copia[indice] = cliente;
       this.clientes = copia;
       this.listaClientesAtualizada.next([...this.clientes]);
+      this.router.navigate(['/']);
     });
   }
-
 }

@@ -3,11 +3,6 @@ const router = express.Router();
 const Cliente = require('../models/cliente');
 
 router.get('', (req, res, next) => {
-  //  console.log("GET!!!");
-  //  res.status(200).json({
-  //      mensagem: "Tudo certo",
-  //      clientes: clientes
-  //  });
   Cliente.find().then(documents => {
     console.log(documents);
     res.status(200).json({
@@ -26,7 +21,6 @@ router.get('/:id', (req, res, next) => {
     }
   })
 });
-
 
 router.post('', (req, res, next) => {
   console.log("POST!!!");
