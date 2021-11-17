@@ -1,4 +1,5 @@
-mat-form-field, input {
+mat-form-field,
+input {
   width: 100%;
 }
 
@@ -8,4 +9,13 @@ mat-spinner {
 
 input[type="file"] {
   visibility: hidden;
+}
+
+.imagem-preview {
+  height: 5rem;
+  margin: 1rem 0;
+}
+
+.imagem-preview img {
+  height: 100%;
 }

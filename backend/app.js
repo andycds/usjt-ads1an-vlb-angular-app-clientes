@@ -1,13 +1,14 @@
+const path = require('path');
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const clienteRoutes = require('./rotas/clientes');
 
-// Mongo Anderson: mongodb+srv://andycds:minhasenha@cluster0.yx57p.mongodb.net/app-mean?retryWrites=true&w=majority
-// Mongo Andreia: mongodb+srv://user_base:outrasenha@cluster0.skf8n.mongodb.net/app-mean?retryWrites=true&w=majority
+const mongo_anderson = "mongodb+srv://andycds:minhasenha@cluster0.yx57p.mongodb.net/app-mean?retryWrites=true&w=majority"
+const mongo_andreia = "mongodb+srv://user_base:outrasenha@cluster0.skf8n.mongodb.net/app-mean?retryWrites=true&w=majority"
 
-mongoose.connect('mongodb+srv://user_base:outrasenha@cluster0.skf8n.mongodb.net/app-mean?retryWrites=true&w=majority')
+mongoose.connect(mongo_anderson)
   .then(() => {
     console.log("Conexão OK")
   }).catch(() => {
@@ -15,6 +16,7 @@ mongoose.connect('mongodb+srv://user_base:outrasenha@cluster0.skf8n.mongodb.net/
   });
 
 app.use(bodyParser.json());
+app.use('/imagens', express.static(path.join("backend/imagens")));
 
 app.use ((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
