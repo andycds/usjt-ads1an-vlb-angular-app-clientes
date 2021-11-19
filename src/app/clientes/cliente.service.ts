@@ -39,27 +39,20 @@ export class ClienteService {
   }
 
   getCliente(idCliente: string) {
-    return this.httpClient.get<{_id: string, nome: string, fone: string, email: string}>(`http://localhost:3000/api/clientes/${idCliente}`);
+    return this.httpClient.get<{_id: string, nome: string, fone: string, email: string, imagemURL: string}>(`http://localhost:3000/api/clientes/${idCliente}`);
   }
 
   adicionarCliente(nome: string, fone: string, email: string, imagem: File) {
-   /*const cliente: Cliente = {
-     id: null,
-     nome: nome,
-     fone: fone,
-     email: email
-   };*/
-   const dadosCliente = new FormData();
-   dadosCliente.append("nome", nome);
-   dadosCliente.append('fone', fone);
-   dadosCliente.append('email', email);
-   dadosCliente.append('imagem', imagem);
+    const dadosCliente = new FormData();
+    dadosCliente.append("nome", nome);
+    dadosCliente.append('fone', fone);
+    dadosCliente.append('email', email);
+    dadosCliente.append('imagem', imagem);
 
    this.httpClient.post<{mensagem: string, cliente: Cliente}>('http://localhost:3000/api/clientes', dadosCliente)
      .subscribe((dados) => {
        console.log(dados.cliente);
-       /*cliente.id = dados.id;*/
-       const cliente: Cliente = {
+        const cliente: Cliente = {
         id: dados.cliente.id,
         nome: nome,
         fone: fone,
@@ -75,7 +68,6 @@ export class ClienteService {
   removerCliente(id: string): void {
     this.httpClient.delete(`http://localhost:3000/api/clientes/${id}`)
     .subscribe(() => {
-      //console.log(`Cliente de id: ${id} removido`);
       this.clientes = this.clientes.filter((cli) => {return cli.id != id});
       this.listaClientesAtualizada.next([...this.clientes]);
     });
@@ -85,12 +77,38 @@ export class ClienteService {
     return this.listaClientesAtualizada.asObservable();
   }
 
-  atualizarCliente(id: string, nome: string, fone: string, email: string) {
-    const cliente: Cliente = { id, nome, fone, email, imagemURL: null };
-    this.httpClient.put(`http://localhost:3000/api/clientes/${id}`, cliente)
+  atualizarCliente(id: string, nome: string, fone: string, email: string, imagem: File | string) {
+    //const cliente: Cliente = { id, nome, fone, email, imagemURL: null };
+    let clienteData: Cliente | FormData;
+    if (typeof(imagem)==='object') {// um arquivo - montar o form data
+      clienteData = new FormData();
+      clienteData.append("id", id);
+      clienteData.append("nome", nome);
+      clienteData.append("fone", fone);
+      clienteData.append("email", email);
+      clienteData.append("imagem", imagem, nome) //ident, valor, nome
+    }
+    else {//uma string - teremos um objeto JSON comum
+      clienteData = {
+        id: id,
+        nome: nome,
+        fone: fone,
+        email: email,
+        imagemURL: imagem
+      }
+    }
+    console.log(typeof(clienteData));
+    this.httpClient.put(`http://localhost:3000/api/clientes/${id}`, clienteData)
     .subscribe(res => {
       const copia = [...this.clientes];
-      const indice = copia.findIndex(cli => cli.id === cliente.id);
+      const indice = copia.findIndex(cli => cli.id === id);
+      const cliente: Cliente = {
+        id: id,
+        nome: nome,
+        fone: fone,
+        email: email,
+        imagemURL: ""
+      }
       copia[indice] = cliente;
       this.clientes = copia;
       this.listaClientesAtualizada.next([...this.clientes]);

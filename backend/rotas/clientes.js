@@ -58,7 +58,6 @@ router.post('', multer({storage: armazenamento}).single('imagem'), (req, res, ne
   then(clienteInserido => {
     res.status(201).json({
       mensagem: 'cliente inserido',
-      //id: clienteInserido._id
       cliente: {
         id: clienteInserido._id,
         nome: clienteInserido.nome,
@@ -77,12 +76,22 @@ router.delete('/:id', (req, res, next) => {
   });
 });
 
-router.put("/:id", (req, res, next) => {
-  const cliente = new Cliente({
-    _id: req.params.id,
-    nome: req.body.nome,
-    fone: req.body.fone,
-    email: req.body.email
+router.put(
+  "/:id",
+  multer({ storage: armazenamento}).single('imagem'),
+  (req, res, next) => {
+    console.log(req.file);
+    let imagemURL = req.body.imagemURL //tentando capturar a URL existente
+    if (req.file) {
+      const url = req.protocol + "://" + req.get("host");
+      imagemURL = url + "/imagens/" + req.file.filename;
+    }
+    const cliente = new Cliente({
+      _id: req.params.id,
+      nome: req.body.nome,
+      fone: req.body.fone,
+      email: req.body.email,
+      imagemURL: imagemURL
   });
   Cliente.updateOne({_id: req.params.id}, cliente)
   .then((resultado) => {
