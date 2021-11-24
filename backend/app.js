@@ -8,7 +8,7 @@ const clienteRoutes = require('./rotas/clientes');
 const mongo_anderson = "mongodb+srv://andycds:minhasenha@cluster0.yx57p.mongodb.net/app-mean?retryWrites=true&w=majority"
 const mongo_andreia = "mongodb+srv://user_base:outrasenha@cluster0.skf8n.mongodb.net/app-mean?retryWrites=true&w=majority"
 
-mongoose.connect(mongo_andreia)
+mongoose.connect(mongo_anderson)
   .then(() => {
     console.log("Conexão OK")
   }).catch(() => {

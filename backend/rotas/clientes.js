@@ -26,11 +26,25 @@ const armazenamento = multer.diskStorage({
 });
 
 router.get('', (req, res, next) => {
-  Cliente.find().then(documents => {
-    console.log(documents);
+  //console.log(req.query);
+  const pageSize = +req.query.pageSize;
+  const page = +req.query.page;
+  const consulta = Cliente.find(); // só executa quando chamamos then
+  let clientesEncontrados;
+  if (pageSize && page) {
+    consulta
+      .skip(pageSize * (page - 1))
+      .limit(pageSize)
+  }
+  consulta.then(documents => {
+    //console.log(documents);
+    clientesEncontrados = documents;
+    // devolve uma Promise, tratada com o próximo then
+    return Cliente.count();
+  }).then((count) => {
     res.status(200).json({
       mensagem: "Tudo Ok",
-      clientes: documents
+      clientes: clientesEncontrados, maxClientes: count
     });
   })
 });
